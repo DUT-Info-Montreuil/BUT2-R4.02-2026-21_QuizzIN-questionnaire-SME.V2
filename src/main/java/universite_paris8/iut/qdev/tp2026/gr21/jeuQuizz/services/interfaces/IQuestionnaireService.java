@@ -7,7 +7,7 @@ import universite_paris8.iut.qdev.tp2026.gr21.jeuQuizz.utils.exceptions.FichierC
 
 import java.util.List;
 
-public interface QuizzInService {
+public interface IQuestionnaireService {
 
     /**
      * 1er cas d'utilisation : Charger fichier
