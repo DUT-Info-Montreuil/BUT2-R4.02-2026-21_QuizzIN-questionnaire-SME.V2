@@ -1,0 +1,39 @@
+package universite_paris8.iut.qdev.tp2026.gr21.jeuQuizz;
+
+import universite_paris8.iut.qdev.tp2026.gr21.jeuQuizz.entities.dtos.QuestionDTO;
+import universite_paris8.iut.qdev.tp2026.gr21.jeuQuizz.entities.dtos.QuestionnaireDTO;
+import universite_paris8.iut.qdev.tp2026.gr21.jeuQuizz.entities.mos.LigneCsvMO;
+import universite_paris8.iut.qdev.tp2026.gr21.jeuQuizz.services.interfaces.IQuestionnaireService;
+import universite_paris8.iut.qdev.tp2026.gr21.jeuQuizz.utils.enums.DifficulteEnum;
+import universite_paris8.iut.qdev.tp2026.gr21.jeuQuizz.utils.enums.LangueEnum;
+import universite_paris8.iut.qdev.tp2026.gr21.jeuQuizz.utils.exceptions.AbsenceFichierException;
+import universite_paris8.iut.qdev.tp2026.gr21.jeuQuizz.utils.exceptions.ChargementImpossibleException;
+import universite_paris8.iut.qdev.tp2026.gr21.jeuQuizz.utils.exceptions.FichierCorrompuException;
+
+import java.util.List;
+
+public class fournirListeQuestionnairesOKMock implements IQuestionnaireService {
+    @Override
+    public List<LigneCsvMO> chargerFichier(String cheminFichier) throws AbsenceFichierException, FichierCorrompuException {
+        return List.of();
+    }
+
+    @Override
+    public List<QuestionnaireDTO> fournirListeQuestionnaires() throws ChargementImpossibleException {
+
+        QuestionDTO q1 = new QuestionDTO(1, "De quel petit objet se munit le golfeur pour surélever sa balle avant de la frapper ?", "Tee", 1, "Le joueur peut poser sa balle sur une cheville de bois ou de plastique qui ne peut pas être utilisée en dehors des départs.", "https://fr.wikipedia.org/wiki/Matériel_de_golf", LangueEnum.fr, DifficulteEnum.Simple);
+        QuestionDTO q2 = new QuestionDTO(
+                2,
+                "Quel sport de raquette porte le nom de la ville anglaise où il fut inventé ?",
+                "Badminton",
+                1,
+                "Le badminton est toujours pratiqué en intérieur car avec le vent, en extérieur, le volant peut brusquement changer de direction.",
+                "https://fr.wikipedia.org/wiki/Badminton",
+                LangueEnum.fr,
+                DifficulteEnum.Simple
+        );
+
+        QuestionnaireDTO questionnaire = new QuestionnaireDTO(1, "Sport niv 1", List.of(q1, q2));
+        return List.of(questionnaire);
+    }
+}
