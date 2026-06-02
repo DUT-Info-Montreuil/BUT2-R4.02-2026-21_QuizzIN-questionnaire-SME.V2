@@ -59,10 +59,11 @@ public class QuestionnaireServiceImpl implements IQuestionnaireService {
                 if (parts.length < 8) {
                     throw new FichierCorrompuException("Nombre de colonnes insuffisant dans le fichier CSV.");
                 }
-
+                System.out.println("sortie du Parser : "+ parts);
                 try {
                     // Extraction et conversion des données (trim() pour s'assurer qu'il n'y a pas d'espaces superflus)
                     int idQuestionnaire = Integer.parseInt(parts[0].trim());
+                    System.out.println(idQuestionnaire);
                     String libelleQuestionnaire = parts[1].trim();
                     int numQuestion = Integer.parseInt(parts[2].trim());
                     String langue = parts[3].trim();
