@@ -187,5 +187,6 @@ public class AppTest {
         List<QuestionnaireDTO> resultats = questService.fournirListeQuestionnaires();
         assertFalse(resultats.isEmpty(), "La liste des questionnaires ne doit pas être vide.");
         assertTrue(resultats.get(0).equals(questionnaireAttendu));
+
     }
 }
