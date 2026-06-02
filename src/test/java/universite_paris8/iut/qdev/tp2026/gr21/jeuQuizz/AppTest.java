@@ -111,7 +111,7 @@ public class AppTest {
     public void testChargerFichierQuandFichierCorrumpuQuestion() {
      //   IQuestionnaireService questService = new chargerFichierCorrompuMock();
         assertThrows(FichierCorrompuException.class, () -> {
-            questService.chargerFichier("src/test/resources/questionsQuizz_corrompu_question.csv");
+            questService.chargerFichier("src/test/resources/questionsQuizz_corrompu_num_question.csv");
         });
     }
 
@@ -161,9 +161,9 @@ public class AppTest {
      * test pour fichier OK
      */
     @Test
-    public void testFournirListeQuestionnairesOK() throws ChargementImpossibleException {
+    public void testFournirListeQuestionnairesOK() throws ChargementImpossibleException, AbsenceFichierException, FichierCorrompuException {
     //    IQuestionnaireService questService = new fournirListeQuestionnairesOKMock();
-
+        List<LigneCsvMO> x = questService.chargerFichier("src/test/resources/questionsQuizz_2025_V1.csv");
         QuestionDTO q1Attendu = new QuestionDTO(
                 1,
                 "De quel petit objet se munit le golfeur pour surélever sa balle avant de la frapper ?",
@@ -188,9 +188,4 @@ public class AppTest {
         assertFalse(resultats.isEmpty(), "La liste des questionnaires ne doit pas être vide.");
         assertTrue(resultats.get(0).equals(questionnaireAttendu));
     }
-
-
-
-
-
 }
