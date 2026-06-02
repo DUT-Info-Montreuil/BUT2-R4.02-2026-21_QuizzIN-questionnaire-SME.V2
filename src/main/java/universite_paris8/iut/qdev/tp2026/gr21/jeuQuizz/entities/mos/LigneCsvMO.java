@@ -6,7 +6,7 @@ import java.util.Objects;
  * Représente une ligne brute extraite du fichier CSV d'entrée.
  * Cette classe intermédiaire unifiée facilite le parsing et le chargement en mémoire.
  */
-public class QuestionnaireCsvMO {
+public class LigneCsvMO {
 
     private int idQuestionnaire;
     private String libelleQuestionnaire;
@@ -19,12 +19,12 @@ public class QuestionnaireCsvMO {
     private String reference;
 
     // Constructeur par défaut
-    public QuestionnaireCsvMO() {}
+    public LigneCsvMO() {}
 
     // Constructeur complet
-    public QuestionnaireCsvMO(int idQuestionnaire, String libelleQuestionnaire, int numQuestion,
-                            String langue, String libelleQuestion, String reponse,
-                            int difficulte, String explication, String reference) {
+    public LigneCsvMO(int idQuestionnaire, String libelleQuestionnaire, int numQuestion,
+                      String langue, String libelleQuestion, String reponse,
+                      int difficulte, String explication, String reference) {
         this.idQuestionnaire = idQuestionnaire;
         this.libelleQuestionnaire = libelleQuestionnaire;
         this.numQuestion = numQuestion;
@@ -71,7 +71,7 @@ public class QuestionnaireCsvMO {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        QuestionnaireCsvMO that = (QuestionnaireCsvMO) o;
+        LigneCsvMO that = (LigneCsvMO) o;
         return idQuestionnaire == that.idQuestionnaire &&
                 numQuestion == that.numQuestion &&
                 difficulte == that.difficulte &&

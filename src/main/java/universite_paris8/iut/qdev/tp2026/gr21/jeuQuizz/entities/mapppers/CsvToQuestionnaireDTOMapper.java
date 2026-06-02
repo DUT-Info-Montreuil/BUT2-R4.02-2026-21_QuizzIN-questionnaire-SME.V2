@@ -2,7 +2,7 @@ package universite_paris8.iut.qdev.tp2026.gr21.jeuQuizz.entities.mapppers;
 
 import universite_paris8.iut.qdev.tp2026.gr21.jeuQuizz.entities.dtos.QuestionDTO;
 import universite_paris8.iut.qdev.tp2026.gr21.jeuQuizz.entities.dtos.QuestionnaireDTO;
-import universite_paris8.iut.qdev.tp2026.gr21.jeuQuizz.entities.mos.QuestionnaireCsvMO;
+import universite_paris8.iut.qdev.tp2026.gr21.jeuQuizz.entities.mos.LigneCsvMO;
 import universite_paris8.iut.qdev.tp2026.gr21.jeuQuizz.utils.enums.DifficulteEnum;
 import universite_paris8.iut.qdev.tp2026.gr21.jeuQuizz.utils.enums.LangueEnum;
 
@@ -24,7 +24,7 @@ public class CsvToQuestionnaireDTOMapper {
      * @param lignesCsv La liste de toutes les lignes extraites du fichier CSV
      * @return La liste des questionnaires DTO structurés
      */
-    public static List<QuestionnaireDTO> mapToQuestionnaireDTOs(List<QuestionnaireCsvMO> lignesCsv) {
+    public static List<QuestionnaireDTO> mapToQuestionnaireDTOs(List<LigneCsvMO> lignesCsv) {
         if (lignesCsv == null || lignesCsv.isEmpty()) {
             return new ArrayList<>();
         }
@@ -33,7 +33,7 @@ public class CsvToQuestionnaireDTOMapper {
         // tout en préservant l'ordre d'apparition des questionnaires du fichier
         Map<Integer, QuestionnaireDTO> mapQuestionnaires = new LinkedHashMap<>();
 
-        for (QuestionnaireCsvMO question : lignesCsv) {
+        for (LigneCsvMO question : lignesCsv) {
             // 1. On récupère ou on crée le QuestionnaireDTO correspondant à l'ID
             QuestionnaireDTO questionnaireDTO = mapQuestionnaires.get(question.getIdQuestionnaire());
             if (questionnaireDTO == null) {

@@ -1,6 +1,7 @@
 package universite_paris8.iut.qdev.tp2026.gr21.jeuQuizz.services.interfaces;
 
 import universite_paris8.iut.qdev.tp2026.gr21.jeuQuizz.entities.dtos.QuestionnaireDTO;
+import universite_paris8.iut.qdev.tp2026.gr21.jeuQuizz.entities.mos.LigneCsvMO;
 import universite_paris8.iut.qdev.tp2026.gr21.jeuQuizz.utils.exceptions.AbsenceFichierException;
 import universite_paris8.iut.qdev.tp2026.gr21.jeuQuizz.utils.exceptions.ChargementImpossibleException;
 import universite_paris8.iut.qdev.tp2026.gr21.jeuQuizz.utils.exceptions.FichierCorrompuException;
@@ -18,7 +19,7 @@ public interface IQuestionnaireService {
      * @throws FichierCorrompuException Si le fichier est corrompu
      */
 
-    public List<QuestionnaireDTO> chargerFichier(String cheminFichier)
+    public List<LigneCsvMO> chargerFichier(String cheminFichier)
             throws AbsenceFichierException, FichierCorrompuException;
 
     /**
