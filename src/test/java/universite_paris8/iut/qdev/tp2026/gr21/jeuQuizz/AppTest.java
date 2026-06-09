@@ -186,7 +186,8 @@ public class AppTest {
         QuestionnaireDTO questionnaireAttendu = new QuestionnaireDTO(1, "Sport niv 1", List.of(q1Attendu, q2Attendu));
         List<QuestionnaireDTO> resultats = questService.fournirListeQuestionnaires();
         assertFalse(resultats.isEmpty(), "La liste des questionnaires ne doit pas être vide.");
-        assertTrue(resultats.get(0).equals(questionnaireAttendu));
+        System.out.println(resultats.get(0));
+        assertEquals(questionnaireAttendu, resultats.get(0));
 
     }
 }

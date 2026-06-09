@@ -1,19 +1,23 @@
 package universite_paris8.iut.qdev.tp2026.gr21.jeuQuizz.services.impls;
-import universite_paris8.iut.qdev.tp2026.gr21.jeuQuizz.utils.enums.LangueEnum;
+
 import com.opencsv.CSVParser;
 import com.opencsv.CSVParserBuilder;
 import com.opencsv.CSVReader;
 import com.opencsv.CSVReaderBuilder;
 import com.opencsv.exceptions.CsvValidationException;
+
 import universite_paris8.iut.qdev.tp2026.gr21.jeuQuizz.entities.dtos.QuestionnaireDTO;
 import universite_paris8.iut.qdev.tp2026.gr21.jeuQuizz.entities.mapppers.CsvToQuestionnaireDTOMapper;
 import universite_paris8.iut.qdev.tp2026.gr21.jeuQuizz.entities.mos.LigneCsvMO;
 import universite_paris8.iut.qdev.tp2026.gr21.jeuQuizz.services.interfaces.IQuestionnaireService;
+import universite_paris8.iut.qdev.tp2026.gr21.jeuQuizz.utils.enums.LangueEnum;
 import universite_paris8.iut.qdev.tp2026.gr21.jeuQuizz.utils.exceptions.AbsenceFichierException;
 import universite_paris8.iut.qdev.tp2026.gr21.jeuQuizz.utils.exceptions.ChargementImpossibleException;
 import universite_paris8.iut.qdev.tp2026.gr21.jeuQuizz.utils.exceptions.FichierCorrompuException;
+
 import java.io.IOException;
 import java.io.Reader;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -41,8 +45,8 @@ public class QuestionnaireServiceImpl implements IQuestionnaireService {
                 .withSeparator(';')
                 .build();
 
-        // 2. Lecture et traitement du fichier via OpenCSV
-        try (Reader reader = Files.newBufferedReader(path);
+        // 2. Lecture et traitement du fichier via OpenCSV (Avec encodage UTF-8)
+        try (Reader reader = Files.newBufferedReader(path, StandardCharsets.UTF_8);
              CSVReader csvReader = new CSVReaderBuilder(reader)
                      .withCSVParser(parser)
                      .build()) {
@@ -59,37 +63,6 @@ public class QuestionnaireServiceImpl implements IQuestionnaireService {
                 if (parts.length < 8) {
                     throw new FichierCorrompuException("Nombre de colonnes insuffisant dans le fichier CSV.");
                 }
-                System.out.println("sortie du Parser : " + parts);
-
-                try {
-                    // Extraction et conversion des données (trim() pour s'assurer qu'il n'y a pas d'espaces superflus)
-// On supprime le caractère invisible BOM (\uFEFF) s'il est présent au début du fichier
-                    int idQuestionnaire = Integer.parseInt(parts[0].replace("\uFEFF", "").trim());
-                    System.out.println(idQuestionnaire);
-                    String libelleQuestionnaire = parts[1].trim();
-                    int numQuestion = Integer.parseInt(parts[2].trim());
-                    String langue = parts[3].trim();
-                    String libelleQuestion = parts[4].trim();
-                    String reponse = parts[5].trim();
-                    int difficulte = Integer.parseInt(parts[6].trim());
-                    String explication = parts[7].trim();
-
-                    // La 9ème colonne (référence) est optionnelle ou peut être vide
-                    String reference = parts.length > 8 ? parts[8].trim() : "";
-
-                    // Création et ajout de l'objet LigneCsvMO
-                    LigneCsvMO ligneMO = new LigneCsvMO(
-                            idQuestionnaire, libelleQuestionnaire, numQuestion,
-                            langue, libelleQuestion, reponse, difficulte,
-                            explication, reference
-                    );
-
-                    nouvellesLignes.add(ligneMO);
-
-                } catch (NumberFormatException e) {
-                    // Si un parseInt échoue (ex: des lettres à la place d'un chiffre de difficulté)
-                    throw new FichierCorrompuException("Erreur de type de donnée dans le fichier (nombre entier attendu).");
-                }
 
                 try {
                     // Nettoyage de l'ID avec le BOM
@@ -97,13 +70,11 @@ public class QuestionnaireServiceImpl implements IQuestionnaireService {
                     String libelleQuestionnaire = parts[1].trim();
                     int numQuestion = Integer.parseInt(parts[2].trim());
 
-                    // --- NOUVEAU : Lecture ET Validation de la langue ---
+                    // Lecture ET Validation de la langue
                     String langue = parts[3].trim();
                     try {
-                        // On essaie de convertir la chaine en Enum (ex: "fr" -> LangueEnum.fr)
                         LangueEnum.valueOf(langue);
                     } catch (IllegalArgumentException e) {
-                        // Si la langue n'existe pas dans l'Enum (ex: "fa"), on lance l'exception attendue
                         throw new FichierCorrompuException("Langue non reconnue dans le fichier CSV : " + langue);
                     }
 
@@ -111,31 +82,36 @@ public class QuestionnaireServiceImpl implements IQuestionnaireService {
                     String reponse = parts[5].trim();
                     int difficulte = Integer.parseInt(parts[6].trim());
                     String explication = parts[7].trim();
-                    String reference = parts.length > 8 ? parts[8].trim() : "";
 
+                    // La 9ème colonne (référence) avec nettoyage des sauts de ligne invisibles
+                    String reference = parts.length > 8 ? parts[8].replace("\r", "").replace("\n", "").trim() : "";
+
+                    // Création de l'objet LigneCsvMO
                     LigneCsvMO ligneMO = new LigneCsvMO(
                             idQuestionnaire, libelleQuestionnaire, numQuestion,
                             langue, libelleQuestion, reponse, difficulte,
                             explication, reference
                     );
 
+                    // On ajoute la ligne UNE SEULE FOIS
                     nouvellesLignes.add(ligneMO);
 
                 } catch (NumberFormatException e) {
                     throw new FichierCorrompuException("Erreur de type de donnée dans le fichier (nombre entier attendu).");
                 }
             }
-            } catch (IOException | CsvValidationException e) {
+        } catch (IOException | CsvValidationException e) {
             // Intercepte les erreurs d'entrée/sortie ou les erreurs de validation spécifiques à OpenCSV
             throw new FichierCorrompuException("Erreur inattendue lors de la lecture du fichier CSV : " + e.getMessage());
-            }
+        }
 
-            if (nouvellesLignes.isEmpty()) {
+        // Vérification du fichier vide
+        if (nouvellesLignes.isEmpty()) {
             throw new FichierCorrompuException("Le fichier CSV est vide ou ne contient aucune question valide.");
         }
 
-                // Si tout s'est bien passé, on met à jour la mémoire du système
-                this.lignesEnMemoire = nouvellesLignes;
+        // Si tout s'est bien passé, on met à jour la mémoire du système
+        this.lignesEnMemoire = nouvellesLignes;
 
         return this.lignesEnMemoire;
     }
