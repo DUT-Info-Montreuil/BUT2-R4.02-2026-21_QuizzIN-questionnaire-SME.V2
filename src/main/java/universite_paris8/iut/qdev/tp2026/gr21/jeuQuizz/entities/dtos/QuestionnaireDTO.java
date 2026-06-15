@@ -7,7 +7,7 @@ public class QuestionnaireDTO {
     private int idQuestionnaire;
     private String libelleQuestionnaire;
     private List<QuestionDTO> listeQuestion;
-    private int nbQuestion;
+    private int nbFoisPose;
 
     public QuestionnaireDTO() {}
 
@@ -26,6 +26,10 @@ public class QuestionnaireDTO {
 
     public List<QuestionDTO> getListeQuestion() { return listeQuestion; }
     public void setListeQuestion(List<QuestionDTO> listeQuestion) { this.listeQuestion = listeQuestion; }
+
+    public int getNbFoisPose() {
+        return nbFoisPose;
+    }
 
     @Override
     public boolean equals(Object o) {
