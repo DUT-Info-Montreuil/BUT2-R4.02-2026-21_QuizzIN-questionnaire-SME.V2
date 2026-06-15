@@ -31,4 +31,7 @@ public interface IQuestionnaireService {
 
     public List<QuestionnaireDTO> fournirListeQuestionnaires()
             throws ChargementImpossibleException;
+
+    public List<Object> StatistiquesQuestionnaire()
+            throws ChargementImpossibleException;
 }

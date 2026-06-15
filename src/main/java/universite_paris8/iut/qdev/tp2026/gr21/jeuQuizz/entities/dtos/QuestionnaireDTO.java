@@ -7,6 +7,7 @@ public class QuestionnaireDTO {
     private int idQuestionnaire;
     private String libelleQuestionnaire;
     private List<QuestionDTO> listeQuestion;
+    private int nbQuestion;
 
     public QuestionnaireDTO() {}
 

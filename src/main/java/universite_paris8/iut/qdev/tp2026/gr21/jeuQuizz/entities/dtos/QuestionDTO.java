@@ -7,14 +7,16 @@ import universite_paris8.iut.qdev.tp2026.gr21.jeuQuizz.utils.enums.LangueEnum;
 import java.util.Objects;
 
 public class QuestionDTO {
-    private int numQuestion; // [cite: 41]
-    private String libelleQuestion; // [cite: 42]
-    private String reponse; // [cite: 43]
-    private int difficulte; // [cite: 44]
-    private String explication; // [cite: 45]
-    private String reference; // [cite: 46]
-    private LangueEnum langue; // [cite: 37]
-    private DifficulteEnum niveau; // [cite: 47]
+    private int numQuestion;
+    private String libelleQuestion;
+    private String reponse;
+    private int difficulte;
+    private String explication;
+    private String reference;
+    private LangueEnum langue;
+    private DifficulteEnum niveau;
+    private int nbFoisPosees;
+    private int nbFoisReussiees;
 
     public QuestionDTO() {}
 
@@ -54,6 +56,14 @@ public class QuestionDTO {
 
     public DifficulteEnum getNiveau() { return niveau; }
     public void setNiveau(DifficulteEnum niveau) { this.niveau = niveau; }
+
+    public int getNbFoisReussiees() {
+        return nbFoisReussiees;
+    }
+
+    public int getNbFoisPosees() {
+        return nbFoisPosees;
+    }
 
     @Override
     public boolean equals(Object o) {
