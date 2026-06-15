@@ -15,8 +15,8 @@ public class QuestionDTO {
     private String reference;
     private LangueEnum langue;
     private DifficulteEnum niveau;
-    private int nbFoisPosees;
-    private int nbFoisReussiees;
+    private int nbFoisPosees = 0;
+    private int nbFoisReussiees = 0;
 
     public QuestionDTO() {}
 

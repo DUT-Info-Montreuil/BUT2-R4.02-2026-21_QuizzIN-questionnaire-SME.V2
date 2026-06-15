@@ -6,6 +6,7 @@ import com.opencsv.CSVReader;
 import com.opencsv.CSVReaderBuilder;
 import com.opencsv.exceptions.CsvValidationException;
 
+import universite_paris8.iut.qdev.tp2026.gr21.jeuQuizz.entities.dtos.QuestionDTO;
 import universite_paris8.iut.qdev.tp2026.gr21.jeuQuizz.entities.dtos.QuestionnaireDTO;
 import universite_paris8.iut.qdev.tp2026.gr21.jeuQuizz.entities.mapppers.CsvToQuestionnaireDTOMapper;
 import universite_paris8.iut.qdev.tp2026.gr21.jeuQuizz.entities.mos.LigneCsvMO;
@@ -14,6 +15,7 @@ import universite_paris8.iut.qdev.tp2026.gr21.jeuQuizz.utils.enums.LangueEnum;
 import universite_paris8.iut.qdev.tp2026.gr21.jeuQuizz.utils.exceptions.AbsenceFichierException;
 import universite_paris8.iut.qdev.tp2026.gr21.jeuQuizz.utils.exceptions.ChargementImpossibleException;
 import universite_paris8.iut.qdev.tp2026.gr21.jeuQuizz.utils.exceptions.FichierCorrompuException;
+import universite_paris8.iut.qdev.tp2026.gr21.jeuQuizz.utils.exceptions.QuestionnaireInexistantException;
 
 import java.io.IOException;
 import java.io.Reader;
@@ -132,5 +134,87 @@ public class QuestionnaireServiceImpl implements IQuestionnaireService {
         }
 
         return listeDto;
+    }
+    public List<Object> StatistiquesQuestionnaire() throws QuestionnaireInexistantException, ChargementImpossibleException {
+
+        if (lignesEnMemoire == null || lignesEnMemoire.isEmpty()) {
+            throw new QuestionnaireInexistantException("Erreur : Questionnaire inexistant en mémoire.");
+        }
+
+        List<QuestionnaireDTO> listeQuestionnairesEnMemoire;
+        listeQuestionnairesEnMemoire = fournirListeQuestionnaires();
+
+        QuestionnaireDTO plusJoue = listeQuestionnairesEnMemoire.get(0);
+        for (QuestionnaireDTO q : listeQuestionnairesEnMemoire) {
+            if (q.getNbFoisPose() > plusJoue.getNbFoisPose()) {
+                plusJoue = q;
+            }
+        }
+
+        List<QuestionDTO> questions = plusJoue.getListeQuestion();
+
+        QuestionDTO meilleureQuestion = filtrerMeilleureQuestion(questions);
+        QuestionDTO pireQuestion = filtrerPireQuestion(questions);
+
+        List<Object> statistiques = new ArrayList<>();
+
+        statistiques.add(plusJoue.getIdQuestionnaire());
+        statistiques.add(plusJoue.getNbFoisPose());
+
+        statistiques.add(meilleureQuestion.getLibelleQuestion());
+        statistiques.add(meilleureQuestion.getNbFoisPosees());
+        statistiques.add(meilleureQuestion.getNbFoisReussiees());
+
+        statistiques.add(pireQuestion.getLibelleQuestion());
+        statistiques.add(pireQuestion.getNbFoisPosees());
+        statistiques.add(pireQuestion.getNbFoisReussiees());
+
+        return statistiques;
+    }
+
+    private QuestionDTO filtrerMeilleureQuestion(List<QuestionDTO> questions) {
+        QuestionDTO top = questions.get(0);
+        float tauxReussiteTop = top.getNbFoisReussiees() / top.getNbFoisPosees();
+        for (QuestionDTO q : questions) {
+            float tauxReussiteQ = q.getNbFoisReussiees() / q.getNbFoisPosees();
+            if ( tauxReussiteQ > tauxReussiteTop) {
+                top = q;
+                tauxReussiteTop = top.getNbFoisReussiees() / top.getNbFoisPosees();
+            } else if (tauxReussiteQ == tauxReussiteTop) {
+                if (q.getDifficulte() > top.getDifficulte()) {
+                    top = q;
+                    tauxReussiteTop = top.getNbFoisReussiees() / top.getNbFoisPosees();
+                } else if (q.getDifficulte() == top.getDifficulte()) {
+                    if (q.getNbFoisPosees() > top.getNbFoisPosees()) {
+                        top = q;
+                        tauxReussiteTop = top.getNbFoisReussiees() / top.getNbFoisPosees();
+                    }
+                }
+            }
+        }
+        return top;
+    }
+
+    private QuestionDTO filtrerPireQuestion(List<QuestionDTO> questions) {
+        QuestionDTO flop = questions.get(0);
+        float tauxReussiteFlop = flop.getNbFoisReussiees() / flop.getNbFoisPosees();
+        for (QuestionDTO q : questions) {
+            float tauxReussiteQ = q.getNbFoisReussiees() / q.getNbFoisPosees();
+            if (tauxReussiteQ < tauxReussiteFlop) {
+                flop = q;
+                tauxReussiteFlop = flop.getNbFoisReussiees() / flop.getNbFoisPosees();
+            } else if (tauxReussiteQ == tauxReussiteFlop) {
+                if (q.getDifficulte() < flop.getDifficulte()) {
+                    flop = q;
+                    tauxReussiteFlop = flop.getNbFoisReussiees() / flop.getNbFoisPosees();
+                } else if (q.getDifficulte() == flop.getDifficulte()) {
+                    if (q.getNbFoisPosees() > flop.getNbFoisPosees()) {
+                        flop = q;
+                        tauxReussiteFlop = flop.getNbFoisReussiees() / flop.getNbFoisPosees();
+                    }
+                }
+            }
+        }
+        return flop;
     }
 }

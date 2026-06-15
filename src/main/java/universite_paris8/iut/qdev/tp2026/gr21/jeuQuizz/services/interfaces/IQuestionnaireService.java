@@ -5,6 +5,7 @@ import universite_paris8.iut.qdev.tp2026.gr21.jeuQuizz.entities.mos.LigneCsvMO;
 import universite_paris8.iut.qdev.tp2026.gr21.jeuQuizz.utils.exceptions.AbsenceFichierException;
 import universite_paris8.iut.qdev.tp2026.gr21.jeuQuizz.utils.exceptions.ChargementImpossibleException;
 import universite_paris8.iut.qdev.tp2026.gr21.jeuQuizz.utils.exceptions.FichierCorrompuException;
+import universite_paris8.iut.qdev.tp2026.gr21.jeuQuizz.utils.exceptions.QuestionnaireInexistantException;
 
 import java.util.List;
 
@@ -33,5 +34,5 @@ public interface IQuestionnaireService {
             throws ChargementImpossibleException;
 
     public List<Object> StatistiquesQuestionnaire()
-            throws ChargementImpossibleException;
+            throws QuestionnaireInexistantException, ChargementImpossibleException;
 }
