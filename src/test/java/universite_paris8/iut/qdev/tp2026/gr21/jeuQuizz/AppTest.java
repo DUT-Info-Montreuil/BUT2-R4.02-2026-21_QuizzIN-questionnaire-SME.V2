@@ -13,6 +13,7 @@ import universite_paris8.iut.qdev.tp2026.gr21.jeuQuizz.utils.enums.LangueEnum;
 import universite_paris8.iut.qdev.tp2026.gr21.jeuQuizz.utils.exceptions.AbsenceFichierException;
 import universite_paris8.iut.qdev.tp2026.gr21.jeuQuizz.utils.exceptions.ChargementImpossibleException;
 import universite_paris8.iut.qdev.tp2026.gr21.jeuQuizz.utils.exceptions.FichierCorrompuException;
+import universite_paris8.iut.qdev.tp2026.gr21.jeuQuizz.utils.exceptions.QuestionnaireInexistantException;
 
 import java.util.List;
 
@@ -189,5 +190,36 @@ public class AppTest {
         System.out.println(resultats.get(0));
         assertEquals(questionnaireAttendu, resultats.get(0));
 
+    }
+
+    /**
+     * test pour statistiques quand le questionnaire est inexistant ou la mémoire vide
+     */
+    @Test
+    public void testStatistiquesQuestionnaireInexistant() {
+        IQuestionnaireService questService = new StatistiquesQuestionnaireInexistantMock();
+        assertThrows(QuestionnaireInexistantException.class, () -> {
+            questService.StatistiquesQuestionnaire();
+        });
+    }
+
+    /**
+     * test pour statistiques OK
+     */
+    @Test
+    public void testStatistiquesQuestionnaireOK() throws AbsenceFichierException, FichierCorrompuException, QuestionnaireInexistantException, ChargementImpossibleException {
+        IQuestionnaireService questService = new StatistiquesQuestionnaireOKMock();
+
+        questService.chargerFichier("src/test/resources/questionsQuizz_test_statistiques.csv");
+
+        List<Object> stats = questService.StatistiquesQuestionnaire();
+
+        // Vérifications basées sur la structure de la liste retournée (8 éléments)
+        assertNotNull(stats, "Les statistiques ne doivent pas être nulles.");
+        assertFalse(stats.isEmpty(), "La liste de statistiques ne doit pas être vide.");
+        assertEquals(8, stats.size(), "Il doit y avoir exactement 8 éléments dans les statistiques.");
+
+        // Vérification des types attendus pour le premier élément (l'ID du questionnaire)
+        assertTrue(stats.get(0) instanceof Integer, "Le premier élément doit être l'identifiant du questionnaire (Entier).");
     }
 }

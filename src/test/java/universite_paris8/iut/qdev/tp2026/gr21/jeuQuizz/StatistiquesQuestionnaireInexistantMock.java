@@ -10,10 +10,10 @@ import universite_paris8.iut.qdev.tp2026.gr21.jeuQuizz.utils.exceptions.Question
 
 import java.util.List;
 
-public class chargerFichierKOfichierIntrouvableMock implements IQuestionnaireService {
+public class StatistiquesQuestionnaireInexistantMock implements IQuestionnaireService {
     @Override
     public List<LigneCsvMO> chargerFichier(String cheminFichier) throws AbsenceFichierException, FichierCorrompuException {
-        throw new AbsenceFichierException("TEST BOUCHONNE");
+        return List.of();
     }
 
     @Override
@@ -23,6 +23,6 @@ public class chargerFichierKOfichierIntrouvableMock implements IQuestionnaireSer
 
     @Override
     public List<Object> StatistiquesQuestionnaire() throws QuestionnaireInexistantException, ChargementImpossibleException {
-        return List.of();
+        throw new QuestionnaireInexistantException("TEST BOUCHONNE : Questionnaire inexistant en mémoire");
     }
 }

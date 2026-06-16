@@ -9,6 +9,7 @@ import universite_paris8.iut.qdev.tp2026.gr21.jeuQuizz.utils.enums.LangueEnum;
 import universite_paris8.iut.qdev.tp2026.gr21.jeuQuizz.utils.exceptions.AbsenceFichierException;
 import universite_paris8.iut.qdev.tp2026.gr21.jeuQuizz.utils.exceptions.ChargementImpossibleException;
 import universite_paris8.iut.qdev.tp2026.gr21.jeuQuizz.utils.exceptions.FichierCorrompuException;
+import universite_paris8.iut.qdev.tp2026.gr21.jeuQuizz.utils.exceptions.QuestionnaireInexistantException;
 
 import java.util.List;
 
@@ -36,4 +37,10 @@ public class fournirListeQuestionnairesOKMock implements IQuestionnaireService {
         QuestionnaireDTO questionnaire = new QuestionnaireDTO(1, "Sport niv 1", List.of(q1, q2));
         return List.of(questionnaire);
     }
+
+    @Override
+    public List<Object> StatistiquesQuestionnaire() throws QuestionnaireInexistantException, ChargementImpossibleException {
+        return List.of();
+    }
+
 }

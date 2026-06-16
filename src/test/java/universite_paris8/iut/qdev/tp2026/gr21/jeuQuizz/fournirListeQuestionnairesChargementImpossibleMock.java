@@ -6,6 +6,7 @@ import universite_paris8.iut.qdev.tp2026.gr21.jeuQuizz.services.interfaces.IQues
 import universite_paris8.iut.qdev.tp2026.gr21.jeuQuizz.utils.exceptions.AbsenceFichierException;
 import universite_paris8.iut.qdev.tp2026.gr21.jeuQuizz.utils.exceptions.ChargementImpossibleException;
 import universite_paris8.iut.qdev.tp2026.gr21.jeuQuizz.utils.exceptions.FichierCorrompuException;
+import universite_paris8.iut.qdev.tp2026.gr21.jeuQuizz.utils.exceptions.QuestionnaireInexistantException;
 
 import java.util.List;
 
@@ -18,5 +19,10 @@ public class fournirListeQuestionnairesChargementImpossibleMock implements IQues
     @Override
     public List<QuestionnaireDTO> fournirListeQuestionnaires() throws ChargementImpossibleException {
         throw new ChargementImpossibleException("TEST BOUCHONNE");
+    }
+
+    @Override
+    public List<Object> StatistiquesQuestionnaire() throws QuestionnaireInexistantException, ChargementImpossibleException {
+        return List.of();
     }
 }
